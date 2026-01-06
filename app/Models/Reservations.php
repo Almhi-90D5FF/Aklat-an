@@ -17,6 +17,7 @@ class Reservations extends Model
         'resource_details',
         'usage_details',
         'status',
+        'cancel_reason',
     ];
 
     public function user()

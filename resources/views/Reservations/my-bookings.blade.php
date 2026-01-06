@@ -1,13 +1,4 @@
 <x-app-layout>
-    <div class="mb-4">
-        <input
-            type="text"
-            placeholder="Search bookings..."
-            class="border rounded px-3 py-2 w-64"
-            onkeyup="filterBookings(this.value)"
-        >
-    </div>
-
 
     <div class="py-8 max-w-7xl mx-auto px-4">
         <h1 class="text-2xl font-bold mb-6">My Bookings</h1>
@@ -16,6 +7,14 @@
             <p>You have no reservations yet.</p>
         @else
 
+        <div class="flex items-center justify-between mb-4">
+        <input
+            type="text"
+            placeholder="Search bookings..."
+            class="border rounded-md px-4 py-2 w-64 focus:outline-none focus:ring focus:ring-maroon-300"
+            onkeyup="filterBookings(this.value)"
+        >
+    </div>
             <table class="w-full border-collapse bg-white border-gray-300 shadow rounded">
                 <thead class="bg-gray-100">
                     <tr>
@@ -47,9 +46,8 @@
                             </td>
 
                             {{-- Status Badge --}}
-                            <td class="border px-3 py-2 font-semibold text-center">
                                 @php
-                                    $statusClasses = match ($reservation->status) {
+                                    $statusCellClasses = match ($reservation->status) {
                                         'approved' => 'bg-green-600 text-white',
                                         'pending' => 'bg-yellow-500 text-black',
                                         'disapproved' => 'bg-red-600 text-white',
@@ -58,13 +56,15 @@
                                     };
                                 @endphp
 
-                                <span class="px-3 py-1 rounded text-sm font-semibold {{ $statusClasses }}">
-                                    {{ ucfirst($reservation->status) }}
-                                </span>
+                            <td class="border text-center font-semibold p-0">
+                                        <div class="w-full h-full py-3 {{ $statusCellClasses }}">
+                                    {{ strtoupper(str_replace('_', ' ', $reservation->status)) }}
+                                </div>
                             </td>
 
+
                             {{-- ACTION --}}
-                            <td class="text-sm">
+                            <td class="text-sm border px-3 py-2 pl-6">
                                 <div class="flex items-center gap-4">
 
                                     {{-- View Details --}}
@@ -109,7 +109,7 @@
                                         @endif
 
                                         <button type="button"
-                                                onclick="toggleCancelReason(this)"
+                                                onclick="return confirm('Cancel this appointment?') ? this.closest('form').submit() : null;"
                                                 title="Cancel booking"
                                                 class="text-xl text-red-600 hover:scale-110 transition">
                                             ❌
